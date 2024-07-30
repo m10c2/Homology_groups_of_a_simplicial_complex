@@ -1,4 +1,4 @@
 ﻿  homology.cpp
-C:\Users\user\Desktop\pluses\homology\homology\homology.cpp(16,63): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\Desktop\pluses\homology\homology\homology.cpp(20,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\Desktop\pluses\homology\homology\homology.cpp(13,69): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\Desktop\pluses\homology\homology\homology.cpp(17,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   homology.vcxproj -> C:\Users\user\Desktop\pluses\homology\x64\Debug\homology.exe

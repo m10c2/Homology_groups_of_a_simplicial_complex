@@ -1,10 +1,7 @@
-﻿// homology.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-
+﻿
 #include <iostream>
 #include <vector>
 #include <stdexcept>
-
 using std::vector;
  
 
@@ -13,7 +10,7 @@ public:
     vector<vector<int>> vertices;
     int dimension;
     
-    Simplex(vector<vector<int>>& vs) : vertices(vs), dimension(vertices.size() - 1){
+    Simplex(const vector<vector<int>>& vs) : vertices(vs), dimension(vertices.size() - 1){
         if (vs.empty()) {
             throw std::invalid_argument("empty simplex");
         }
@@ -27,9 +24,33 @@ public:
             throw std::invalid_argument("a simplex in n dimentions must have n+1 vertices"); 
         }
     }
+    Simplex() {
+        dimension = 0;
+        vertices = {};
+    }
 
-    void print() {
-        return;
+    void printSimplex() {
+        if (dimension == 0) {
+            std::cout << "{ }" << std::endl;
+        }
+        else {
+            std::cout << "{";
+            for (int i = 0; i < vertices.size(); i++) {
+                std::cout << "{";
+                for (int j = 0; j < vertices[0].size(); j++) {
+                    std::cout << vertices[i][j];
+                    if (j != vertices[0].size() - 1) {
+                        std::cout << ",";
+                    }
+                }
+                std::cout << "}";
+                
+                if (i!= vertices.size() - 1) {
+                    std::cout << ",";
+                }
+            }
+            std::cout << "}" << std::endl;;
+        }
     }
 };
 
@@ -44,7 +65,7 @@ class ChainComplex {
 public:
     vector<vector<Simplex>> chain_complex;
 
-    ChainComplex(vector<Simplex>& ss) {
+    ChainComplex(const vector<Simplex>& ss) {
         std::cout << "ChainComplex constructor" << std::endl;
         for (const auto& simplex : ss) {
             addSimplex(simplex);
@@ -57,20 +78,26 @@ public:
         std::cout << "nice" << std::endl;
     }
 
-    void print() {
-        return;
+    ChainComplex() {}
+
+    void printComplex() {
+        for (int i = 0; i < chain_complex.size(); i++) {
+            for (int j = 0; j < chain_complex[i].size(); j++) {
+                chain_complex[i][j].printSimplex();
+            }
+        }
     }
-    
 };
     
 int main()
 {
     vector<vector<int>> vertices = { {1,0,0},{0,1,0},{0,0,1} };
     Simplex simplex(vertices);
-
+    Simplex* emptysimplex = new Simplex();
+    
     vector<Simplex> simplex_list = {simplex};
     
-    //ChainComplex complex(simplex_list);
+    ChainComplex complex(simplex_list);
 
    
     return 0;

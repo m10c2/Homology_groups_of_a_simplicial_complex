@@ -4,7 +4,6 @@
 #include <stdexcept>
 using std::vector;
  
-
 class Simplex {
 public:
     vector<vector<int>> vertices;
@@ -12,7 +11,8 @@ public:
     
     Simplex(const vector<vector<int>>& vs) : vertices(vs), dimension(vertices.size() - 1){
         if (vs.empty()) {
-            throw std::invalid_argument("empty simplex");
+            dimension = 0;
+            return;
         }
         int dim = vs[0].size();
         for (const auto& vertex : vs) {
@@ -55,18 +55,11 @@ public:
 };
 
 
-/*TODO:
-1)реализовать пустой симплекс, потому что некоторых размерностей может не быть
-2)реализовать конструктор, принимающий на вход список симплексов
-3)print
-*/
-
 class ChainComplex {
 public:
     vector<vector<Simplex>> chain_complex;
 
     ChainComplex(const vector<Simplex>& ss) {
-        std::cout << "ChainComplex constructor" << std::endl;
         for (const auto& simplex : ss) {
             addSimplex(simplex);
         }
@@ -74,31 +67,43 @@ public:
   
     void inline addSimplex(const Simplex& s) {
         //проблема в том, что этого индекса может и не быть :(
-        chain_complex[s.dimension].push_back(s);//крашится на этом месте
-        std::cout << "nice" << std::endl;
+        while (chain_complex.size() <= s.dimension) {
+            chain_complex.push_back({});
+        }
+        chain_complex.at(s.dimension).push_back(s);
     }
 
     ChainComplex() {}
 
     void printComplex() {
         for (int i = 0; i < chain_complex.size(); i++) {
+            std::cout << "Dimension " << i << ":" << std::endl;
             for (int j = 0; j < chain_complex[i].size(); j++) {
                 chain_complex[i][j].printSimplex();
             }
+            std::cout << "\n";
         }
     }
 };
-    
-int main()
-{
-    vector<vector<int>> vertices = { {1,0,0},{0,1,0},{0,0,1} };
-    Simplex simplex(vertices);
-    Simplex* emptysimplex = new Simplex();
-    
-    vector<Simplex> simplex_list = {simplex};
-    
-    ChainComplex complex(simplex_list);
 
-   
+int main() {
+
+    try {
+        vector<vector<int>> vs1 = { {1,0,0},{0,1,0},{0,0,1} };
+        vector<vector<int>> vs2 = { {1,0},{2,1} };
+        vector<vector<int>> vs3 = { {1,1},{2,2} };
+
+        Simplex s1(vs1);
+        Simplex s2(vs2);
+        Simplex s3(vs3);
+
+        ChainComplex cc({ s1, s2, s3 });
+
+        cc.printComplex();
+    }
+    catch (const std::exception e) {
+        std::cout << "Exception: " << e.what() << std::endl;
+    }
+
     return 0;
 }
